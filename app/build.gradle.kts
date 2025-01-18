@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.pjurado.firebasecurso2425"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.pjurado.firebasecurso2425"
