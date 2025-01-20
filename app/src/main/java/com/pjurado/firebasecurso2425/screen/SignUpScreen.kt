@@ -32,7 +32,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pjurado.firebasecurso2425.data.AuthManager
+import com.pjurado.firebasecurso2425.data.AuthRes
 import com.pjurado.firebasecurso2425.ui.theme.Purple40
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -74,7 +76,7 @@ fun SignUpScreen(auth: AuthManager, navigateToHome: () -> Unit) {
             Spacer(modifier = Modifier.height(30.dp))
             Button(
                 onClick = {
-                   //TODO
+                    scope.launch() { signUp({navigateToHome}, auth, email, password, context) }
                 },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
@@ -97,5 +99,24 @@ fun SignUpScreen(auth: AuthManager, navigateToHome: () -> Unit) {
         }
 
     }
+}
+
+suspend fun signUp(navigateToHome: () -> Unit, auth: AuthManager, email: String, password: String, context: Context) {
+    if (email.isNotEmpty() && password.isNotEmpty()) {
+        when (val result = auth.createUserWithEmailAndPassword(email, password)) {
+            is AuthRes.Success -> {
+                Toast.makeText(context, "Usuario creado", Toast.LENGTH_SHORT).show()
+                navigateToHome()
+            }
+
+            is AuthRes.Error -> {
+                Toast.makeText(context, "Error al crear usuario", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    else {
+        Toast.makeText(context, "Llene todos los campos", Toast.LENGTH_SHORT).show()
+    }
+
 }
 

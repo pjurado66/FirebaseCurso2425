@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "346206903969",
+    "project_id": "clase2425-b46d5",
+    "storage_bucket": "clase2425-b46d5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346206903969:android:b58f5d5a985a27888b9ae0",
+        "android_client_info": {
+          "package_name": "com.pjurado.firebasecurso2425"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9fbO7vd08hVrrAcb82smakeF9GGpnDls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.pjurado.firebasecurso2425" />
+                  <option name="mobileSdkAppId" value="1:346206903969:android:b58f5d5a985a27888b9ae0" />
+                  <option name="projectId" value="clase2425-b46d5" />
+                  <option name="projectNumber" value="346206903969" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
