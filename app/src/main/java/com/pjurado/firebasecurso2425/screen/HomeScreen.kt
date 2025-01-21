@@ -37,6 +37,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.pjurado.firebasecurso2425.R
 import com.pjurado.firebasecurso2425.data.AuthManager
 
@@ -44,6 +46,7 @@ import com.pjurado.firebasecurso2425.data.AuthManager
 @Composable
 fun HomeScreen(auth: AuthManager, navigateToLogin: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
+    val user = auth.getCurrentUser()
 
     Scaffold (
         topBar = {
@@ -53,8 +56,18 @@ fun HomeScreen(auth: AuthManager, navigateToLogin: () -> Unit) {
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if(true) {
-
+                        if(user?.photoUrl != null){
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(user?.photoUrl)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = "Imagen",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(40.dp)
+                            )
                         } else {
                             Image(
                                 painter = painterResource(R.drawable.profile),
@@ -64,17 +77,18 @@ fun HomeScreen(auth: AuthManager, navigateToLogin: () -> Unit) {
                                     .size(40.dp)
                                     .clip(CircleShape)
                             )
+
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
-                                text = "Hola",
+                                text = user?.displayName ?: "Anónimo",
                                 fontSize = 20.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
                             Text(
-                                text =  "Anónimo",
+                                text =  user?.email ?: "Sin correo",
                                 fontSize = 12.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis)
@@ -99,7 +113,8 @@ fun HomeScreen(auth: AuthManager, navigateToLogin: () -> Unit) {
                 LogoutDialog(
                     onDismiss = { showDialog = false },
                     onConfirm = {
-                        //TODO
+                        auth.signOut()
+                        navigateToLogin()
                         showDialog = false
                     }
                 )

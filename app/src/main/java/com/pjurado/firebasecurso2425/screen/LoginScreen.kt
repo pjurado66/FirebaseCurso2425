@@ -1,5 +1,7 @@
 package com.pjurado.firebasecurso2425.screen
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -41,7 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pjurado.firebasecurso2425.R
 import com.pjurado.firebasecurso2425.data.AuthManager
+import com.pjurado.firebasecurso2425.data.AuthRes
 import com.pjurado.firebasecurso2425.ui.theme.Purple40
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LoginScreen(
@@ -102,7 +108,9 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = {
-                    //TODO
+                    scope.launch {
+                        signIn(email, password, context, auth, navigateToHome)
+                    }
                 },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp).height(50.dp),
@@ -126,7 +134,9 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(25.dp))
             SocialMediaButton(
                 onClick = {
-                    //TODO
+                    scope.launch {
+                        signAnonimous(auth, navigateToHome, context)
+                    }
                 },
                 text = "Continuar como invitado",
                 icon = R.drawable.ic_incognito,
@@ -142,6 +152,42 @@ fun LoginScreen(
                 color = Color(0xFFF1F1F1)
             )
         }
+    }
+}
+
+suspend fun signAnonimous(auth: AuthManager, navigateToHome: () -> Unit, context: Context) {
+    val res = withContext(Dispatchers.IO) {
+        auth.signInAnonymously()
+    }
+    when (res) {
+        is AuthRes.Success -> {
+            Toast.makeText(context, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show()
+            navigateToHome()
+        }
+        is AuthRes.Error -> {
+            Toast.makeText(context, res.errorMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+suspend fun signIn(email: String, password: String, context: Context, auth: AuthManager, navigateToHome: () -> Unit) {
+    if (email.isNotEmpty() && password.isNotEmpty()) {
+        val result =
+            withContext(Dispatchers.IO) {
+                auth.signInWithEmailAndPassword(email, password)
+            }
+            when (result) {
+                is AuthRes.Success -> {
+                    Toast.makeText(context, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show()
+                    navigateToHome()
+                }
+                is AuthRes.Error -> {
+                    Toast.makeText(context, result.errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+    } else{
+        Toast.makeText(context, "Email y password tienen que estar rellenos", Toast.LENGTH_SHORT).show()
     }
 }
 

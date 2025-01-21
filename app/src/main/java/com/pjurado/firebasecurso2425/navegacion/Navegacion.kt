@@ -40,7 +40,7 @@ fun Navegacion() {
                 auth,
                 {
                     navController.navigate(Login) {
-                        popUpTo(Login){ inclusive = true }
+                        popUpTo(Home){ inclusive = true }
                     }
                 }
             )

@@ -18,7 +18,39 @@ class AuthManager {
         }
     }
 
+    suspend fun signInWithEmailAndPassword(email: String, password: String): AuthRes<FirebaseUser> {
+        return try {
+            val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            AuthRes.Success(authResult.user!!)
+        } catch (e: Exception) {
+            AuthRes.Error(e.message ?: "Error al iniciar sesión")
+        }
+    }
 
+    fun getCurrentUser(): FirebaseUser? = auth.currentUser
+
+    fun signOut() {
+        auth.signOut()
+    }
+
+    suspend fun resetPassword(email: String): AuthRes<Unit> {
+        return try {
+            auth.sendPasswordResetEmail(email).await()
+            AuthRes.Success(Unit)
+        } catch (e: Exception) {
+            AuthRes.Error(e.message ?: "Error al restablecer la contraseña")
+        }
+
+    }
+
+    suspend fun signInAnonymously(): AuthRes<FirebaseUser?> {
+        return try {
+            val user = auth.signInAnonymously().await().user
+            AuthRes.Success(user)
+        } catch (e: Exception) {
+            AuthRes.Error(e.message ?: "Error al iniciar sesión anónima")
+        }
+    }
 
 }
 

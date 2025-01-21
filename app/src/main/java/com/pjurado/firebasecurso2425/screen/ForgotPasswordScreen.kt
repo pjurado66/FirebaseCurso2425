@@ -1,5 +1,6 @@
 package com.pjurado.firebasecurso2425.screen
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,8 +29,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pjurado.firebasecurso2425.data.AuthManager
+import com.pjurado.firebasecurso2425.data.AuthRes
 import com.pjurado.firebasecurso2425.ui.theme.Purple40
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ForgotPasswordScreen(auth: AuthManager, navigateToLogin: () -> Unit) {
@@ -39,7 +43,9 @@ fun ForgotPasswordScreen(auth: AuthManager, navigateToLogin: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(top = 40.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 40.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -58,7 +64,9 @@ fun ForgotPasswordScreen(auth: AuthManager, navigateToLogin: () -> Unit) {
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
-                    //TODO
+                    scope.launch {
+                        forgotPassword(email, auth, context, navigateToLogin)
+                    }
                 },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
@@ -66,6 +74,28 @@ fun ForgotPasswordScreen(auth: AuthManager, navigateToLogin: () -> Unit) {
                     .height(50.dp)
             ) {
                 Text(text = "Recuperar contraseña")
+            }
+        }
+    }
+}
+
+suspend fun forgotPassword(email: String, auth: AuthManager, context: Context, navigateToLogin: () -> Unit) {
+    if (email.isNotEmpty()) {
+        val res = withContext(Dispatchers.IO) {
+            auth.resetPassword(email)
+        }
+        when (res) {
+            is AuthRes.Success -> {
+                Toast.makeText(
+                    context,
+                    "Se ha enviado un correo para restablecer la contraseña",
+                    Toast.LENGTH_SHORT
+                ).show()
+                navigateToLogin()
+            }
+
+            is AuthRes.Error -> {
+                Toast.makeText(context, "Error: ${res.errorMessage}", Toast.LENGTH_SHORT).show()
             }
         }
     }
