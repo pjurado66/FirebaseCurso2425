@@ -12,7 +12,20 @@
           "package_name": "com.pjurado.firebasecurso2425"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "346206903969-u30q0hotcqlukk62lsdao4g4u87rnfjd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pjurado.firebasecurso2425",
+            "certificate_hash": "ac5c536b704752065de05f36d6fe326523405943"
+          }
+        },
+        {
+          "client_id": "346206903969-aj3fad9r7ubhjtk6cbrjv6ghm6ca9tpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD9fbO7vd08hVrrAcb82smakeF9GGpnDls"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346206903969-aj3fad9r7ubhjtk6cbrjv6ghm6ca9tpb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

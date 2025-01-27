@@ -1,6 +1,7 @@
 package com.pjurado.firebasecurso2425.navegacion
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,9 +12,10 @@ import com.pjurado.firebasecurso2425.screen.LoginScreen
 import com.pjurado.firebasecurso2425.screen.SignUpScreen
 
 @Composable
-fun Navegacion() {
+fun Navegacion(auth: AuthManager) {
     val navController = rememberNavController()
-    val auth = AuthManager()
+    val context = LocalContext.current
+
 
     NavHost(navController = navController, startDestination = Login) {
         composable<Login> {

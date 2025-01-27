@@ -2,6 +2,8 @@ package com.pjurado.firebasecurso2425.screen
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -41,6 +43,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.auth.GoogleAuthProvider
 import com.pjurado.firebasecurso2425.R
 import com.pjurado.firebasecurso2425.data.AuthManager
 import com.pjurado.firebasecurso2425.data.AuthRes
@@ -60,6 +64,40 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val googleSignLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { result ->
+        when (val account =
+            auth.handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(result.data))) {
+            is AuthRes.Success -> {
+                val credential = GoogleAuthProvider.getCredential(account.data?.idToken, null)
+                scope.launch {
+                    val firebaseUser = auth.googleSignInCredential(credential)
+                    when (firebaseUser) {
+                        is AuthRes.Success -> {
+                            Toast.makeText(
+                                context,
+                                "Inicio de sesión correcto",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navigateToHome()
+                        }
+
+                        is AuthRes.Error -> {
+                            Toast.makeText(
+                                context,
+                                "Error al iniciar sesión",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+            is AuthRes.Error -> {
+                Toast.makeText(context, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     Box(modifier = Modifier.fillMaxSize()){
         Text(
@@ -145,7 +183,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(15.dp))
             SocialMediaButton(
                 onClick = {
-                    //TODO
+                    auth.signInWithGoogle(googleSignLauncher)
                 },
                 text = "Continuar con Google",
                 icon = R.drawable.ic_google,
