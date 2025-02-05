@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.play.services)
+    implementation(libs.firebase.firestore)
 
     implementation(libs.coil)
 

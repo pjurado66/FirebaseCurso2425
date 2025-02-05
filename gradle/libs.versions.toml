@@ -33,6 +33,7 @@ serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization
 firebase-bom = { group ="com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = {group = "com.google.firebase", name = "firebase-analytics"}
 firebase-auth = {group = "com.google.firebase", name = "firebase-auth-ktx"}
+firebase-firestore = {group = "com.google.firebase", name = "firebase-firestore-ktx"}
 coil = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }
 play-services = {group = "com.google.android.gms", name = "play-services-auth", version = "21.3.0"}
 
